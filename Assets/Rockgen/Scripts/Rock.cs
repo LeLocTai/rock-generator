@@ -1,5 +1,5 @@
-using System;
-using System.Collections.Generic;
+using Rockgen.Primitive;
+using UnityEditor;
 using UnityEngine;
 using UnityMeshSimplifier;
 
@@ -7,7 +7,7 @@ namespace RockGen
 {
 public class Rock : MonoBehaviour
 {
-    public float radius = 1f;
+    public float baseResolution = 8;
 
     [Range(0, 100)]
     public float quality = 50f;
@@ -26,16 +26,32 @@ public class Rock : MonoBehaviour
     {
         grid       = FindObjectOfType<VoronoiGrid>();
         meshFilter = GetComponent<MeshFilter>();
-        if (!origMesh)
-            origMesh = meshFilter.sharedMesh;
+
+        SphereCubeFactory.Instance.Radius = .5f;
+
+        var scale = transform.lossyScale;
+        SphereCubeFactory.Instance.NumSubDivX = Mathf.RoundToInt(baseResolution * scale.x);
+        SphereCubeFactory.Instance.NumSubDivY = Mathf.RoundToInt(baseResolution * scale.y);
+        SphereCubeFactory.Instance.NumSubDivZ = Mathf.RoundToInt(baseResolution * scale.z);
+
+        origMesh = SphereCubeFactory.Instance.Create();
+
+        ApplyTransformation();
     }
 
-    void Update()
+    void OnValidate()
+    {
+        if (!EditorApplication.isPlaying) return;
+
+        ApplyTransformation();
+    }
+
+    void ApplyTransformation()
     {
         var vertices = origMesh.vertices;
         var normals  = origMesh.normals;
 
-        var scale = transform.lossyScale;
+        var scale   = transform.lossyScale;
         var distort = distortion * (scale.x + scale.y + scale.z) / 3f;
 
         for (var i = 0; i < vertices.Length; i++)

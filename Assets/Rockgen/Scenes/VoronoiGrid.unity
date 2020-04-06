@@ -387,7 +387,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef3dd27ee4e54b45becacfad988e4a9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0
+  baseResolution: 16
   quality: 50
   distortion: 0.5
   midlevel: 0.5
