@@ -31,14 +31,24 @@ public class VoronoiGrid : MonoBehaviour
         }
     }
 
+    (int, int, int) WorldToGridCoord(Vector3 worldPos)
+    {
+        return (Clamp(FloorToInt(worldPos.x), 0, size - 1),
+                Clamp(FloorToInt(worldPos.y), 0, size - 1),
+                Clamp(FloorToInt(worldPos.z), 0, size - 1)
+               );
+    }
+
     public (Vector3, float) Nearest(Vector3 target)
     {
         var nearest  = points[0, 0, 0];
         var nearestD = Infinity;
 
-        int cellZ = RoundToInt(target.z % size);
-        int cellY = RoundToInt(target.y % size);
-        int cellX = RoundToInt(target.x % size);
+        // int cellZ = RoundToInt(target.z % size);
+        // int cellY = RoundToInt(target.y % size);
+        // int cellX = RoundToInt(target.x % size);
+
+        var (cellX, cellY, cellZ) = WorldToGridCoord(target);
 
         int startZ = Max(0, cellZ - 2);
         int startY = Max(0, cellY - 2);
@@ -61,6 +71,22 @@ public class VoronoiGrid : MonoBehaviour
         }
 
         return (nearest, (nearestD));
+    }
+
+    public void GetCellCorners(Vector3 position, Vector3[] corners)
+    {
+        if (corners.Length != 8) throw new ArgumentException(nameof(corners) + " should be length 8");
+
+        var (x, y, z) = WorldToGridCoord(position);
+
+        corners[0] = points[x, y, z];
+        corners[1] = points[x + 1, y, z];
+        corners[2] = points[x, y + 1, z];
+        corners[3] = points[x, y, z + 1];
+        corners[4] = points[x + 1, y + 1, z];
+        corners[5] = points[x, y + 1, z + 1];
+        corners[6] = points[x + 1, y, z + 1];
+        corners[7] = points[x + 1, y + 1, z + 1];
     }
 
     void OnDrawGizmos()

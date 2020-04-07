@@ -1211,8 +1211,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   size: 6
   randomness: 0.75
-  dMax: 1.4
-  dMin: 1
   debug: 0
 --- !u!4 &1668307092
 Transform:
@@ -1306,9 +1304,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseResolution: 16
-  quality: 50
+  quality: 15
   distortion: 0.5
   midlevel: 0.5
+  update: 1
   debug: 0
   debugColor: {r: 1, g: 1, b: 1, a: 0.15294118}
 --- !u!4 &1974017599
