@@ -73,7 +73,13 @@ public class VoronoiGrid : MonoBehaviour
             Gizmos.DrawSphere(point, .03f);
         }
 
+        for (var z = 1; z < size; z++)
+        for (var y = 1; y < size; y++)
+        for (var x = 1; x < size; x++)
         {
+            Gizmos.DrawLine(points[x - 1, y, z], points[x, y, z]);
+            Gizmos.DrawLine(points[x, y - 1, z], points[x, y, z]);
+            Gizmos.DrawLine(points[x, y, z - 1], points[x, y, z]);
         }
     }
 }
