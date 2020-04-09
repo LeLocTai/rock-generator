@@ -97,7 +97,7 @@ public class Rock : MonoBehaviour
 
         mesh.RecalculateNormals();
 
-        CalcUV(mesh);
+        // CalcUV(mesh);
 
         meshFilter.mesh = mesh;
     }
