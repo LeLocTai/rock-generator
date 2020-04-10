@@ -1209,9 +1209,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0cec62d45884b669f3ed55e652834df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 6
-  randomness: 0.75
-  debug: 0
+  settings:
+    size: 6
+    randomness: 0.75
+    debug: 0
 --- !u!4 &1668307092
 Transform:
   m_ObjectHideFlags: 0
@@ -1303,13 +1304,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef3dd27ee4e54b45becacfad988e4a9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseResolution: 8
-  quality: 15
-  distortion: 0.5
-  midlevel: 0.5
+  settings:
+    testTf: {fileID: 0}
+    baseResolution: 8
+    targetTriangleCount: 1000
+    distortion: 0.5
+    midlevel: 0.5
   update: 1
   debug: 0
-  debugColor: {r: 1, g: 1, b: 1, a: 0.15294118}
+  debugColor: {r: 1, g: 1, b: 1, a: 0.1254902}
 --- !u!4 &1974017599
 Transform:
   m_ObjectHideFlags: 0

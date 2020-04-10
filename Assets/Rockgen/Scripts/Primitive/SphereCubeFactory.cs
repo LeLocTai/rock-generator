@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-using UnityEngine;
-using static UnityEngine.Mathf;
+using MeshDecimator;
+using MeshDecimator.Math;
+using static System.Math;
 
 namespace Rockgen.Primitive
 {
@@ -44,7 +45,7 @@ public class SphereCubeFactory
         get => radius;
         set
         {
-            stateInvalidated = Approximately(value, radius);
+            stateInvalidated = Abs(value - radius) < 1e-4f;
             radius           = value;
         }
     }
@@ -59,9 +60,9 @@ public class SphereCubeFactory
 
     bool stateInvalidated = true;
 
-    readonly List<Vector3> vertices  = new List<Vector3>();
-    readonly List<Vector3> normals   = new List<Vector3>();
-    readonly List<int>     triangles = new List<int>();
+    readonly List<Vector3d> vertices  = new List<Vector3d>();
+    readonly List<Vector3>  normals   = new List<Vector3>();
+    readonly List<int>      triangles = new List<int>();
 
     int GetVerticesCount()
     {
@@ -100,13 +101,13 @@ public class SphereCubeFactory
         float zSqr   = zCoord * zCoord;
 
         // https://math.stackexchange.com/questions/118760/can-someone-please-explain-the-cube-to-sphere-mapping-formula-to-me
-        Vector3 normal = new Vector3(
+        Vector3d normal = new Vector3d(
             xCoord * Sqrt(1f - ySqr / 2f - zSqr / 2f + ySqr * zSqr / 3f),
             yCoord * Sqrt(1f - xSqr / 2f - zSqr / 2f + xSqr * zSqr / 3f),
             zCoord * Sqrt(1f - xSqr / 2f - ySqr / 2f + xSqr * ySqr / 3f)
         );
 
-        normals.Add(normal);
+        normals.Add(new Vector3(normal));
         vertices.Add(normal * Radius);
     }
 
@@ -243,11 +244,9 @@ public class SphereCubeFactory
     {
         UpdateState();
 
-        var mesh = new Mesh();
-
-        mesh.SetVertices(vertices);
-        mesh.SetNormals(normals);
-        mesh.SetTriangles(triangles, 0);
+        var mesh = new Mesh(vertices.ToArray(), triangles.ToArray()) {
+            Normals = normals.ToArray()
+        };
 
         return mesh;
     }
