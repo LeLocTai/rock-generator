@@ -1,15 +1,8 @@
 using System.Linq;
-using System.Numerics;
-using MeshDecimator;
-using MeshDecimator.Algorithms;
 using MeshDecimator.Math;
-using Rockgen.Primitive;
 using UnityEditor;
 using UnityEngine;
-using static UnityEngine.Vector3;
-using Matrix4x4 = UnityEngine.Matrix4x4;
 using Mesh = UnityEngine.Mesh;
-using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
 namespace RockGen
@@ -83,9 +76,9 @@ public class RockBehavior : MonoBehaviour
         };
     }
 
-    static System.Numerics.Matrix4x4 ToSMatrix(Matrix4x4 m)
+    static Matrix4x4 ToSMatrix(UnityEngine.Matrix4x4 m)
     {
-        return new System.Numerics.Matrix4x4(
+        return new Matrix4x4(
             m.m00, m.m01, m.m02, m.m03,
             m.m10, m.m11, m.m12, m.m13,
             m.m20, m.m21, m.m22, m.m23,
