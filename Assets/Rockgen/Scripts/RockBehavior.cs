@@ -49,7 +49,7 @@ public class RockBehavior : MonoBehaviour
         if (!EditorApplication.isPlaying) return;
         if (!meshFilter) return;
 
-        meshFilter.mesh = ToUnityMesh(generator.ApplyTransformation());
+        meshFilter.mesh = ToUnityMesh(generator.MakeRock());
     }
 
     void Update()
@@ -57,7 +57,7 @@ public class RockBehavior : MonoBehaviour
         if (update)
         {
             settings.Transform = ToSMatrix(transform.localToWorldMatrix);
-            meshFilter.mesh    = ToUnityMesh(generator.ApplyTransformation());
+            meshFilter.mesh    = ToUnityMesh(generator.MakeRock());
         }
     }
 
