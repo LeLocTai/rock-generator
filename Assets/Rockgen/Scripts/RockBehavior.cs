@@ -1,34 +1,49 @@
 using System.Linq;
 using MeshDecimator.Math;
+using RockGen;
 using UnityEditor;
 using UnityEngine;
+using Matrix4x4 = UnityEngine.Matrix4x4;
 using Mesh = UnityEngine.Mesh;
 using Vector3 = UnityEngine.Vector3;
 
-namespace RockGen
+namespace RockGenUnity
 {
 public class RockBehavior : MonoBehaviour
 {
-    public RockGenerationSettings settings;
+    [Header("Grid")]
+    public int size = 6;
 
-    public bool  update;
+    public float randomness = .75f;
+
+    [Header("Rock")]
+    public float stockDensity = 8;
+
+    public int   targetTriangleCount = 1000;
+    public float distortion          = 1;
+
+    [Header("Debug")]
+    public bool update;
+
     public bool  debug;
     public Color debugColor = Color.white;
 
-    RockGenerator generator;
-    MeshFilter    meshFilter;
+    RockGenerationSettings settings;
+    RockGenerator          generator;
+    MeshFilter             meshFilter;
 
     void OnEnable()
     {
         meshFilter = GetComponent<MeshFilter>();
 
-        settings.grid      = FindObjectOfType<VoronoiGridBehaviour>().grid;
-        settings.size      = ToDV3(transform.lossyScale);
-        settings.Transform = ToSMatrix(transform.localToWorldMatrix);
+        generator = new RockGenerator();
 
-        settings.foundNearest += OnSettingsOnfoundNearest;
+        settings           = new RockGenerationSettings();
+        settings.Transform = ToRMatrix(transform.localToWorldMatrix);
 
-        generator = new RockGenerator(settings);
+        generator.foundNearest += OnSettingsOnfoundNearest;
+
+        ApplySettings();
     }
 
     void OnSettingsOnfoundNearest(Vector3d vertex, Vector3d normal, Vector3d nearest)
@@ -45,6 +60,8 @@ public class RockBehavior : MonoBehaviour
 
     void OnValidate()
     {
+        ApplySettings();
+
         if (update) return;
         if (!EditorApplication.isPlaying) return;
         if (!meshFilter) return;
@@ -52,12 +69,31 @@ public class RockBehavior : MonoBehaviour
         meshFilter.mesh = ToUnityMesh(generator.MakeRock());
     }
 
+    void ApplySettings()
+    {
+        var newGridSettings = new VoronoiGridSettings {
+            Size       = size,
+            Randomness = randomness
+        };
+
+        var newSettings = new RockGenerationSettings(settings) {
+            GridSettings        = newGridSettings,
+            StockDensity        = stockDensity,
+            TargetTriangleCount = targetTriangleCount,
+            Distortion          = distortion
+        };
+
+        generator.Settings = newSettings;
+    }
+
     void Update()
     {
         if (update)
         {
-            settings.Transform = ToSMatrix(transform.localToWorldMatrix);
-            meshFilter.mesh    = ToUnityMesh(generator.MakeRock());
+            settings.Transform = ToRMatrix(transform.localToWorldMatrix);
+            ApplySettings();
+
+            meshFilter.mesh = ToUnityMesh(generator.MakeRock());
         }
     }
 
@@ -76,9 +112,9 @@ public class RockBehavior : MonoBehaviour
         };
     }
 
-    static Matrix4x4 ToSMatrix(UnityEngine.Matrix4x4 m)
+    static RockGen.Matrix4x4 ToRMatrix(Matrix4x4 m)
     {
-        return new Matrix4x4(
+        return new RockGen.Matrix4x4(
             m.m00, m.m01, m.m02, m.m03,
             m.m10, m.m11, m.m12, m.m13,
             m.m20, m.m21, m.m22, m.m23,
@@ -86,9 +122,28 @@ public class RockBehavior : MonoBehaviour
         );
     }
 
-    static MeshDecimator.Math.Vector3 ToDV3(Vector3 vec)
+    void OnDrawGizmos()
     {
-        return new MeshDecimator.Math.Vector3(vec.x, vec.y, vec.z);
+        if (!debug) return;
+
+        foreach (var point in generator.Grid.points)
+        {
+            Gizmos.DrawSphere(ToUV3(point), .03f);
+        }
+
+        for (var z = 1; z < generator.Settings.GridSettings.Size; z++)
+        for (var y = 1; y < generator.Settings.GridSettings.Size; y++)
+        for (var x = 1; x < generator.Settings.GridSettings.Size; x++)
+        {
+            Gizmos.DrawLine(ToUV3(generator.Grid.points[x - 1, y, z]), ToUV3(generator.Grid.points[x, y, z]));
+            Gizmos.DrawLine(ToUV3(generator.Grid.points[x, y - 1, z]), ToUV3(generator.Grid.points[x, y, z]));
+            Gizmos.DrawLine(ToUV3(generator.Grid.points[x, y, z - 1]), ToUV3(generator.Grid.points[x, y, z]));
+        }
+    }
+
+    Vector3 ToUV3(Vector3d v)
+    {
+        return new Vector3((float) v.x, (float) v.y, (float) v.z);
     }
 }
 }
