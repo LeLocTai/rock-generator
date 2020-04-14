@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Rockgen/Scenes/VoronoiGrid.unity
+    guid: 93a7788f38c1e6247b14e17bee6e57a9
   m_configObjects: {}
