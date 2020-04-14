@@ -1,7 +1,6 @@
 using System.Linq;
 using MeshDecimator.Math;
 using RockGen;
-using UnityEditor;
 using UnityEngine;
 using Matrix4x4 = UnityEngine.Matrix4x4;
 using Mesh = UnityEngine.Mesh;
@@ -63,14 +62,16 @@ public class RockBehavior : MonoBehaviour
         ApplySettings();
 
         if (update) return;
-        if (!EditorApplication.isPlaying) return;
+        if (!Application.isPlaying) return;
         if (!meshFilter) return;
 
-        meshFilter.mesh = ToUnityMesh(generator.MakeRock());
+        meshFilter.mesh = MakeRock();
     }
 
     void ApplySettings()
     {
+        if (generator == null) return;
+
         var newGridSettings = new VoronoiGridSettings {
             Size       = size,
             Randomness = randomness
@@ -93,8 +94,16 @@ public class RockBehavior : MonoBehaviour
             settings.Transform = ToRMatrix(transform.localToWorldMatrix);
             ApplySettings();
 
-            meshFilter.mesh = ToUnityMesh(generator.MakeRock());
+            meshFilter.mesh = MakeRock();
         }
+    }
+
+    Mesh MakeRock()
+    {
+        FrameTime.Instance.StartWork("Gen");
+        var mesh = ToUnityMesh(generator.MakeRock());
+        FrameTime.Instance.EndWork("Gen");
+        return mesh;
     }
 
     static Mesh ToUnityMesh(MeshDecimator.Mesh dmesh)
