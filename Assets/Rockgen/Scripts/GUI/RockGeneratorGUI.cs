@@ -28,22 +28,28 @@ public class RockGeneratorGUI
 
     public static bool OnGUI(ref RockGenerationSettings settings)
     {
-        settings.StockDensity = SettingSlider(nameof(settings.StockDensity), settings.StockDensity, 2, 16);
-        settings.TargetTriangleCount = Mathf.RoundToInt(SettingSlider(nameof(settings.TargetTriangleCount),
-                                                                      settings.TargetTriangleCount,
-                                                                      100, 2000));
-        settings.Distortion = SettingSlider(nameof(settings.Distortion), settings.Distortion, -2, 2);
+        settings.StockDensity = SettingSlider(nameof(settings.StockDensity),
+                                              settings.StockDensity, 2, 16, "N1");
+        settings.TargetTriangleCount = Mathf.RoundToInt(
+            SettingSlider(nameof(settings.TargetTriangleCount),
+                          settings.TargetTriangleCount, 100, 2000,
+                          "N0"
+            ));
+        settings.Distortion = SettingSlider(nameof(settings.Distortion),
+                                            settings.Distortion, -2, 2);
 
         return GUI.changed;
     }
 
-    static float SettingSlider(string varName, float value, float min, float max)
+    static float SettingSlider(string varName,
+                               float  value, float min, float max,
+                               string format = "N")
     {
         BeginHorizontal();
         Label(Regex.Replace(varName, @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1"),
               MaxWidth(MAX_LABEL_WIDTH));
         float newVal = HorizontalSlider(value, min, max, ExpandWidth(true));
-        Label(value.ToString("N"), Width(5 * CHARACTER_WIDTH));
+        Label(value.ToString(format), Width(5 * CHARACTER_WIDTH));
         EndHorizontal();
         return newVal;
     }
