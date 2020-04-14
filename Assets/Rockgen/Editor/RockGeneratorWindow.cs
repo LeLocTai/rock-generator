@@ -1,4 +1,5 @@
 using RockGen;
+using UnityEditor;
 using UnityEngine;
 
 namespace RockGenUnity
@@ -18,7 +19,7 @@ public class RockGeneratorWindow : UnityEditor.EditorWindow
                                                                 Vector3.one * 1.35f))
     };
 
-    [UnityEditor.MenuItem("Tools/Rock Generator")]
+    [MenuItem("Tools/Rock Generator")]
     private static void ShowWindow()
     {
         var window = GetWindow<RockGeneratorWindow>();
@@ -29,9 +30,22 @@ public class RockGeneratorWindow : UnityEditor.EditorWindow
     RockGenerator generator;
     Mesh          mesh;
 
+    GameObject previewObj;
+    MeshFilter previewMeshFilter;
+    Editor     previewEditor;
+    GUIStyle   previewBackground;
+
     void Initialize()
     {
-        generator = new RockGenerator();
+        generator         = new RockGenerator();
+        previewObj        = new GameObject("Rock Preview") {hideFlags = HideFlags.HideAndDontSave};
+        previewMeshFilter = previewObj.AddComponent<MeshFilter>();
+        previewMeshFilter.mesh = mesh;
+
+        var renderer = previewObj.AddComponent<MeshRenderer>();
+        renderer.material = Resources.Load<Material>("Rock");
+
+        previewBackground = new GUIStyle {normal = {background = Texture2D.blackTexture}};
 
         CreateMesh(defaultSettings);
     }
@@ -41,6 +55,13 @@ public class RockGeneratorWindow : UnityEditor.EditorWindow
         generator.Settings = settings;
 
         mesh = Convert.ToUnityMesh(generator.MakeRock());
+
+        previewMeshFilter.mesh = mesh;
+
+        if (previewEditor)
+            DestroyImmediate(previewEditor);
+
+        previewEditor = Editor.CreateEditor(previewObj);
     }
 
     private void OnGUI()
@@ -51,8 +72,10 @@ public class RockGeneratorWindow : UnityEditor.EditorWindow
         if (RockGeneratorGUI.OnGUI(ref newSetings))
             CreateMesh(newSetings);
 
-        if (mesh)
-            GUILayout.Label(mesh.vertexCount.ToString());
+
+        previewEditor.OnInteractivePreviewGUI(GUILayoutUtility.GetRect(200, 200), previewBackground);
+
+        if (GUILayout.Button("Save")) { }
     }
 }
 }
