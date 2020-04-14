@@ -28,7 +28,7 @@ public class RockBehavior : MonoBehaviour
     public Color debugColor = Color.white;
 
     RockGenerationSettings settings;
-    RockGenerator          generator;
+    internal RockGenerator generator;
     MeshFilter             meshFilter;
 
     void OnEnable()
@@ -38,11 +38,12 @@ public class RockBehavior : MonoBehaviour
         generator = new RockGenerator();
 
         settings           = new RockGenerationSettings();
-        settings.Transform = ToRMatrix(transform.localToWorldMatrix);
+        settings.Transform = Convert.ToRMatrix(transform.localToWorldMatrix);
 
         generator.foundNearest += OnSettingsOnfoundNearest;
 
         ApplySettings();
+        UpdateMesh();
     }
 
     void OnSettingsOnfoundNearest(Vector3d vertex, Vector3d normal, Vector3d nearest)
@@ -55,17 +56,6 @@ public class RockBehavior : MonoBehaviour
             Debug.DrawLine(vert, near, debugColor);
             Debug.DrawRay(vert, norm * .2f, Color.green);
         }
-    }
-
-    void OnValidate()
-    {
-        ApplySettings();
-
-        if (update) return;
-        if (!Application.isPlaying) return;
-        if (!meshFilter) return;
-
-        meshFilter.mesh = MakeRock();
     }
 
     void ApplySettings()
@@ -87,48 +77,33 @@ public class RockBehavior : MonoBehaviour
         generator.Settings = newSettings;
     }
 
+    internal void UpdateMesh()
+    {
+        FrameTime.Instance.StartWork("Gen");
+        meshFilter.mesh = Convert.ToUnityMesh(generator.MakeRock());
+        FrameTime.Instance.EndWork("Gen");
+    }
+
+    void OnValidate()
+    {
+        ApplySettings();
+
+        if (update) return;
+        if (!Application.isPlaying) return;
+        if (!meshFilter) return;
+
+        UpdateMesh();
+    }
+
     void Update()
     {
         if (update)
         {
-            settings.Transform = ToRMatrix(transform.localToWorldMatrix);
-            ApplySettings();
-
-            meshFilter.mesh = MakeRock();
+            settings.Transform = Convert.ToRMatrix(transform.localToWorldMatrix);
+            // ApplySettings();
+            //
+            // UpdateMesh();
         }
-    }
-
-    Mesh MakeRock()
-    {
-        FrameTime.Instance.StartWork("Gen");
-        var mesh = ToUnityMesh(generator.MakeRock());
-        FrameTime.Instance.EndWork("Gen");
-        return mesh;
-    }
-
-    static Mesh ToUnityMesh(MeshDecimator.Mesh dmesh)
-    {
-        return new Mesh {
-            vertices = dmesh.Vertices
-                            .Select(v => new Vector3((float) v.x,
-                                                     (float) v.y,
-                                                     (float) v.z))
-                            .ToArray(),
-            // uv        = dmesh.UV1.Select(uv => new Vector2(uv.x, uv.y)).ToArray(),
-            triangles = dmesh.GetIndices(0),
-            normals = dmesh.Normals.Select(v => new Vector3(v.x, v.y, v.z))
-                           .ToArray()
-        };
-    }
-
-    static RockGen.Matrix4x4 ToRMatrix(Matrix4x4 m)
-    {
-        return new RockGen.Matrix4x4(
-            m.m00, m.m01, m.m02, m.m03,
-            m.m10, m.m11, m.m12, m.m13,
-            m.m20, m.m21, m.m22, m.m23,
-            m.m30, m.m31, m.m32, m.m33
-        );
     }
 
     void OnDrawGizmos()
