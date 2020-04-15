@@ -2,11 +2,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using RockGen;
-using Rockgen.Scripts.RockGen;
 using UnityEngine;
 using static UnityEngine.GUILayout;
-using Matrix4x4 = RockGen.Matrix4x4;
 
 namespace RockGen.Unity
 {

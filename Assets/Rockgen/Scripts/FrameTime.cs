@@ -50,6 +50,7 @@ public class FrameTime : MonoBehaviour
     {
         sb.Clear();
 
+        sb.AppendLine("Frame Time (ms):");
         AppendTime("Total", Time.deltaTime);
 
         MaxNameLength = jobs.Select(j => j.Key).Append("Total").Max(n => n.Length) + 2;

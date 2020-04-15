@@ -11,7 +11,7 @@ public class RockGeneratorWindow : EditorWindow
             Randomness = .75f
         },
         StockDensity        = 8,
-        TargetTriangleCount = 1000,
+        TargetTriangleCount = 220,
         Distortion          = 1,
         Transform = Convert.ToRMatrix(UnityEngine.Matrix4x4.TRS(new Vector3(2.5f, 2.5f, 2.5f),
                                                                 Quaternion.identity,

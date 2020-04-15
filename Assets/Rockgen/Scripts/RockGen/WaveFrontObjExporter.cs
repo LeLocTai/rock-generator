@@ -1,9 +1,8 @@
 using System.IO;
 using System.Text;
 using MeshDecimator;
-using MeshDecimator.Math;
 
-namespace Rockgen.Scripts.RockGen
+namespace RockGen.Unity
 {
 public static class WaveFrontObjExporter
 {

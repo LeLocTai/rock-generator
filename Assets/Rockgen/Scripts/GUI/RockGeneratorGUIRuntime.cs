@@ -13,11 +13,14 @@ public class RockGeneratorGUIRuntime : MonoBehaviour
         rock = FindObjectOfType<RockBehavior>();
 
         var bgTex = new Texture2D(1, 1);
-        bgTex.SetPixel(0, 0, Color.black);
+        bgTex.SetPixel(0, 0, new Color(.15f, .15f, .15f, .95f));
         bgTex.Apply();
         bgStyle = new GUIStyle {
-            normal        = {background = bgTex},
-            fixedWidth    = 400,
+            normal = {
+                background = bgTex
+            },
+            padding       = new RectOffset(8, 8, 8, 8),
+            fixedWidth    = 360,
             stretchHeight = false,
         };
     }

@@ -436,10 +436,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 167668029}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1573420865, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
 --- !u!114 &167668032
@@ -1771,7 +1771,7 @@ MonoBehaviour:
   size: 6
   randomness: 0.75
   stockDensity: 8
-  targetTriangleCount: 1000
+  targetTriangleCount: 220
   distortion: 1
   update: 1
   debug: 0
