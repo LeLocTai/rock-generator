@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Rockgen.Unity;
 using UnityEngine;
 using static UnityEngine.GUILayout;
 
@@ -47,8 +48,7 @@ public class RockGeneratorGUI
 
         if (Button("Save"))
         {
-            var path = Path.Combine(Application.dataPath, "rock.obj");
-            WaveFrontObjExporter.Export(generator.LatestMesh, path);
+            var path = FileSaver.SaveMesh(generator.LatestMesh, "rock");
             OnFileExported(path);
         }
 

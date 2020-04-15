@@ -60,12 +60,5 @@ public static class WaveFrontObjExporter
 
         return sb.ToString();
     }
-
-    public static void Export(Mesh mesh, string outputPath)
-    {
-        var data = ToObjString(mesh);
-
-        File.WriteAllText(outputPath, data);
-    }
 }
 }
