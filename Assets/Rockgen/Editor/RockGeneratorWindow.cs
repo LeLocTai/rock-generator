@@ -1,12 +1,9 @@
-using System.IO;
-using RockGen;
-using Rockgen.Scripts.RockGen;
 using UnityEditor;
 using UnityEngine;
 
 namespace RockGen.Unity
 {
-public class RockGeneratorWindow : UnityEditor.EditorWindow
+public class RockGeneratorWindow : EditorWindow
 {
     private readonly RockGenerationSettings defaultSettings = new RockGenerationSettings {
         GridSettings = new VoronoiGridSettings {
@@ -20,6 +17,8 @@ public class RockGeneratorWindow : UnityEditor.EditorWindow
                                                                 Quaternion.identity,
                                                                 Vector3.one * 1.35f))
     };
+
+    static Texture2D backgroundTexture;
 
     [MenuItem("Tools/Rock Generator")]
     private static void ShowWindow()
@@ -41,14 +40,19 @@ public class RockGeneratorWindow : UnityEditor.EditorWindow
     {
         RockGeneratorGUI.fileExported += HandleFileExported;
 
-        generator         = new RockGenerator(){Settings = defaultSettings};
-        previewObj        = new GameObject("Rock Preview") {hideFlags = HideFlags.HideAndDontSave};
+        generator         = new RockGenerator {Settings = defaultSettings};
+        previewObj        = new GameObject {hideFlags   = HideFlags.HideAndDontSave};
         previewMeshFilter = previewObj.AddComponent<MeshFilter>();
 
         var renderer = previewObj.AddComponent<MeshRenderer>();
         renderer.material = Resources.Load<Material>("Rock");
 
-        previewBackground = new GUIStyle {normal = {background = Texture2D.blackTexture}};
+        previewObj.SetActive(false);
+
+        backgroundTexture = new Texture2D(1, 1);
+        backgroundTexture.SetPixel(0, 0, new Color(.5f, .5f, .5f));
+        backgroundTexture.Apply();
+        previewBackground = new GUIStyle {normal = {background = backgroundTexture}};
 
         CreateMesh();
     }
@@ -56,6 +60,8 @@ public class RockGeneratorWindow : UnityEditor.EditorWindow
     ~RockGeneratorWindow()
     {
         RockGeneratorGUI.fileExported -= HandleFileExported;
+        DestroyImmediate(previewObj);
+        DestroyImmediate(previewEditor);
     }
 
     static void HandleFileExported(string path)
@@ -82,7 +88,9 @@ public class RockGeneratorWindow : UnityEditor.EditorWindow
         if (RockGeneratorGUI.OnGUI(generator))
             CreateMesh();
 
+        previewObj.SetActive(true);
         previewEditor.OnInteractivePreviewGUI(GUILayoutUtility.GetRect(200, 200), previewBackground);
+        previewObj.SetActive(false);
     }
 }
 }
