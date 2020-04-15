@@ -26,6 +26,8 @@ public class RockGenerator
         }
     }
 
+    public Mesh LatestMesh { get; private set; }
+
     public event Action<Vector3d, Vector3d, Vector3d> foundNearest;
 
     public VoronoiGrid Grid { get; private set; }
@@ -93,6 +95,7 @@ public class RockGenerator
 
         // CalcUV(mesh);
 
+        LatestMesh = mesh;
         return mesh;
     }
 

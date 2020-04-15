@@ -1,4 +1,6 @@
+using System.IO;
 using RockGen;
+using Rockgen.Scripts.RockGen;
 using UnityEditor;
 using UnityEngine;
 
@@ -27,8 +29,8 @@ public class RockGeneratorWindow : UnityEditor.EditorWindow
         window.Show();
     }
 
-    RockGenerator generator;
-    Mesh          mesh;
+    RockGenerator      generator;
+    MeshDecimator.Mesh mesh;
 
     GameObject previewObj;
     MeshFilter previewMeshFilter;
@@ -37,26 +39,35 @@ public class RockGeneratorWindow : UnityEditor.EditorWindow
 
     void Initialize()
     {
-        generator         = new RockGenerator();
+        RockGeneratorGUI.fileExported += HandleFileExported;
+
+        generator         = new RockGenerator(){Settings = defaultSettings};
         previewObj        = new GameObject("Rock Preview") {hideFlags = HideFlags.HideAndDontSave};
         previewMeshFilter = previewObj.AddComponent<MeshFilter>();
-        previewMeshFilter.mesh = mesh;
 
         var renderer = previewObj.AddComponent<MeshRenderer>();
         renderer.material = Resources.Load<Material>("Rock");
 
         previewBackground = new GUIStyle {normal = {background = Texture2D.blackTexture}};
 
-        CreateMesh(defaultSettings);
+        CreateMesh();
     }
 
-    void CreateMesh(RockGenerationSettings settings)
+    ~RockGeneratorWindow()
     {
-        generator.Settings = settings;
+        RockGeneratorGUI.fileExported -= HandleFileExported;
+    }
 
-        mesh = Convert.ToUnityMesh(generator.MakeRock());
+    static void HandleFileExported(string path)
+    {
+        AssetDatabase.Refresh();
+    }
 
-        previewMeshFilter.mesh = mesh;
+    void CreateMesh()
+    {
+        mesh = generator.MakeRock();
+
+        previewMeshFilter.mesh = Convert.ToUnityMesh(mesh);
 
         if (previewEditor)
             DestroyImmediate(previewEditor);
@@ -68,14 +79,10 @@ public class RockGeneratorWindow : UnityEditor.EditorWindow
     {
         if (generator == null) Initialize();
 
-        var newSetings = new RockGenerationSettings(generator.Settings);
-        if (RockGeneratorGUI.OnGUI(ref newSetings))
-            CreateMesh(newSetings);
-
+        if (RockGeneratorGUI.OnGUI(generator))
+            CreateMesh();
 
         previewEditor.OnInteractivePreviewGUI(GUILayoutUtility.GetRect(200, 200), previewBackground);
-
-        if (GUILayout.Button("Save")) { }
     }
 }
 }

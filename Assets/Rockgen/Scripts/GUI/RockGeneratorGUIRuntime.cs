@@ -22,10 +22,8 @@ public class RockGeneratorGUIRuntime : MonoBehaviour
 
         GUILayout.BeginArea(new Rect(0, 0, 400, 800));
 
-        var newSetings = new RockGenerationSettings(rock.generator.Settings);
-        if (RockGeneratorGUI.OnGUI(ref newSetings))
+        if (RockGeneratorGUI.OnGUI(rock.generator))
         {
-            rock.generator.Settings = newSetings;
             rock.UpdateMesh();
         }
 

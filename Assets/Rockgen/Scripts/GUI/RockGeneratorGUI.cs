@@ -1,7 +1,9 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using RockGen;
+using Rockgen.Scripts.RockGen;
 using UnityEngine;
 using static UnityEngine.GUILayout;
 using Matrix4x4 = RockGen.Matrix4x4;
@@ -26,19 +28,34 @@ public class RockGeneratorGUI
         }.Max(n => n.Length) * CHARACTER_WIDTH;
     }
 
-    public static bool OnGUI(ref RockGenerationSettings settings)
+    public static event Action<string> fileExported;
+
+    public static bool OnGUI(RockGenerator generator)
     {
-        settings.StockDensity = SettingSlider(nameof(settings.StockDensity),
-                                              settings.StockDensity, 2, 16, "N1");
-        settings.TargetTriangleCount = Mathf.RoundToInt(
-            SettingSlider(nameof(settings.TargetTriangleCount),
-                          settings.TargetTriangleCount, 100, 2000,
+        var newSettings = new RockGenerationSettings(generator.Settings);
+
+        newSettings.StockDensity = SettingSlider(nameof(newSettings.StockDensity),
+                                                 newSettings.StockDensity, 2, 16, "N1");
+        newSettings.TargetTriangleCount = Mathf.RoundToInt(
+            SettingSlider(nameof(newSettings.TargetTriangleCount),
+                          newSettings.TargetTriangleCount, 100, 2000,
                           "N0"
             ));
-        settings.Distortion = SettingSlider(nameof(settings.Distortion),
-                                            settings.Distortion, -2, 2);
+        newSettings.Distortion = SettingSlider(nameof(newSettings.Distortion),
+                                               newSettings.Distortion, -2, 2);
 
-        return GUI.changed;
+        var settingsChanged = GUI.changed;
+        if (settingsChanged)
+            generator.Settings = newSettings;
+
+        if (Button("Save"))
+        {
+            var path = Path.Combine(Application.dataPath, "rock.obj");
+            WaveFrontObjExporter.Export(generator.LatestMesh, path);
+            OnFileExported(path);
+        }
+
+        return settingsChanged;
     }
 
     static float SettingSlider(string varName,
@@ -52,6 +69,11 @@ public class RockGeneratorGUI
         Label(value.ToString(format), Width(5 * CHARACTER_WIDTH));
         EndHorizontal();
         return newVal;
+    }
+
+    static void OnFileExported(string path)
+    {
+        fileExported?.Invoke(path);
     }
 }
 }
