@@ -29,6 +29,8 @@ public class DragOrbit : MonoBehaviour
 
     void LateUpdate()
     {
+        if (GUIUtility.hotControl != 0) return;
+
         if (Input.GetMouseButton(0))
         {
             rotationYAxis += xSpeed * distance * Input.GetAxis("Mouse X");
