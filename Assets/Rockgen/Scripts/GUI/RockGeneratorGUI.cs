@@ -6,7 +6,7 @@ using UnityEngine;
 using static UnityEngine.GUILayout;
 using Matrix4x4 = RockGen.Matrix4x4;
 
-namespace RockGenUnity
+namespace RockGen.Unity
 {
 public class RockGeneratorGUI
 {

@@ -1,11 +1,11 @@
 using System.Linq;
 using UnityEngine;
 
-namespace RockGenUnity
+namespace RockGen.Unity
 {
 public static class Convert
 {
-    public static RockGen.Matrix4x4 ToRMatrix(Matrix4x4 m)
+    public static RockGen.Matrix4x4 ToRMatrix(UnityEngine.Matrix4x4 m)
     {
         return new RockGen.Matrix4x4(
             m.m00, m.m01, m.m02, m.m03,

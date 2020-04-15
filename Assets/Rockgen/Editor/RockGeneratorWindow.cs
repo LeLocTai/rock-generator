@@ -2,7 +2,7 @@ using RockGen;
 using UnityEditor;
 using UnityEngine;
 
-namespace RockGenUnity
+namespace RockGen.Unity
 {
 public class RockGeneratorWindow : UnityEditor.EditorWindow
 {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using RockGen;
 using UnityEngine;
 
-namespace RockGenUnity
+namespace RockGen.Unity
 {
 public class RockGeneratorGUIRuntime : MonoBehaviour
 {

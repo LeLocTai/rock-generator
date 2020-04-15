@@ -6,7 +6,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace RockGenUnity
+namespace RockGen.Unity
 {
 [RequireComponent(typeof(Text))]
 public class FrameTime : MonoBehaviour

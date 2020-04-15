@@ -6,7 +6,7 @@ using Matrix4x4 = UnityEngine.Matrix4x4;
 using Mesh = UnityEngine.Mesh;
 using Vector3 = UnityEngine.Vector3;
 
-namespace RockGenUnity
+namespace RockGen.Unity
 {
 public class RockBehavior : MonoBehaviour
 {
