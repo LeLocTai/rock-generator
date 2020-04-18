@@ -60,9 +60,8 @@ public class RockGenerator
     public Mesh MakeRock()
     {
         var vertices = new Vector3d[stockMesh.VertexCount];
-        var normals  = new Vector3[stockMesh.VertexCount];
 
-        var distort = Settings.Distortion / Settings.Scale.GetMagnitude();
+        var distort = Settings.Distortion;// / Settings.Scale.GetMagnitude();
 
         for (var i = 0; i < vertices.Length; i++)
         {
@@ -74,7 +73,6 @@ public class RockGenerator
             var worldResult = worldPos + worldNormal * ((nearestDS - .5) * distort);
 
             vertices[i] = Transform(Settings.InverseTransform, worldResult);
-            normals[i]  = stockMesh.Normals[i]; // (Vector3) TransformDir(settings.inverseTransform, worldNormal);
 
             OnFoundNearest(worldResult, worldNormal, nearest);
         }
@@ -83,7 +81,6 @@ public class RockGenerator
             vertices,
             stockMesh.Indices
         );
-        mesh.Normals = normals;
 
         var simplifier = new FastQuadricMeshSimplification();
         simplifier.Initialize(mesh);
@@ -116,7 +113,7 @@ public class RockGenerator
             m.M11 * v.x + m.M12 * v.y + m.M13 * v.z,
             m.M21 * v.x + m.M22 * v.y + m.M23 * v.z,
             m.M31 * v.x + m.M32 * v.y + m.M33 * v.z
-        );
+        ).Normalized;
     }
 
     // void CalcUV(Mesh mesh)

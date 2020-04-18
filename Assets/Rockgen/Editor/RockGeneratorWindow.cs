@@ -12,7 +12,7 @@ public class RockGeneratorWindow : EditorWindow
         },
         StockDensity        = 8,
         TargetTriangleCount = 220,
-        Distortion          = 1,
+        Distortion          = .5f,
         Transform = Convert.ToRMatrix(UnityEngine.Matrix4x4.TRS(new Vector3(2.5f, 2.5f, 2.5f),
                                                                 Quaternion.identity,
                                                                 Vector3.one * 1.35f))
