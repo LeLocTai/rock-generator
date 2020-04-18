@@ -7,8 +7,9 @@
 Shader "Triplanar/Surface Shader (RNM)" {
     Properties {
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
-        [NoScaleOffset] _BumpMap("Normal Map", 2D) = "bump" {}
-        _Glossiness("Smoothness", Range(0, 1)) = 0.5
+        [NoScaleOffset][Normal] _BumpMap("Normal Map", 2D) = "bump" {}
+        _Roughness("Roughness", Range(0, 1)) = 0.5
+        [NoScaleOffset] _RoughnessMap("Roughness Map", 2D) = "white" {}
         [Gamma] _Metallic("Metallic", Range(0, 1)) = 0
         [NoScaleOffset] _OcclusionMap("Occlusion", 2D) = "white" {}
         _OcclusionStrength("Strength", Range(0.0, 1.0)) = 1.0
@@ -48,8 +49,9 @@ Shader "Triplanar/Surface Shader (RNM)" {
 
         sampler2D _BumpMap;
         sampler2D _OcclusionMap;
+        sampler2D _RoughnessMap;
 
-        half _Glossiness;
+        half _Roughness;
         half _Metallic;
 
         half _OcclusionStrength;
@@ -104,6 +106,12 @@ Shader "Triplanar/Surface Shader (RNM)" {
             fixed4 colZ = tex2D(_MainTex, uvZ);
             fixed4 col = colX * triblend.x + colY * triblend.y + colZ * triblend.z;
 
+            // roughness textures
+            half roughX = tex2D(_RoughnessMap, uvX).r;
+            half roughY = tex2D(_RoughnessMap, uvY).r;
+            half roughZ = tex2D(_RoughnessMap, uvZ).r;
+            half rough = LerpOneTo(roughX * triblend.x + roughY * triblend.y + roughZ * triblend.z, _OcclusionStrength) * _Roughness;
+
             // occlusion textures
             half occX = tex2D(_OcclusionMap, uvX).g;
             half occY = tex2D(_OcclusionMap, uvY).g;
@@ -144,7 +152,7 @@ Shader "Triplanar/Surface Shader (RNM)" {
             // set surface ouput properties
             o.Albedo = col.rgb;
             o.Metallic = _Metallic;
-            o.Smoothness = _Glossiness;
+            o.Smoothness = 1 - rough;
             o.Occlusion = occ;
 
             // convert world space normals into tangent normals
