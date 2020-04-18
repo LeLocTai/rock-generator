@@ -5,6 +5,15 @@ namespace RockGen.Unity
 {
 public static class Convert
 {
+    public static Vector3 ToVector3(Vector v)
+    {
+        return new Vector3(
+            (float) v.X,
+            (float) v.Y,
+            (float) v.Z
+        );
+    }
+
     public static RockGen.Matrix4x4 ToRMatrix(UnityEngine.Matrix4x4 m)
     {
         return new RockGen.Matrix4x4(
