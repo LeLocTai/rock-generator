@@ -38,15 +38,25 @@ public class RockGeneratorGUI
             SettingSlider(nameof(newSettings.TargetTriangleCount),
                           newSettings.TargetTriangleCount, 100, 2000,
                           "N0"
-            ));
+            )
+        );
         newSettings.Distortion = SettingSlider(nameof(newSettings.Distortion),
                                                newSettings.Distortion, -2, 2);
+
+
+        if (Button("Make Rock"))
+        {
+            var newGridSettings = new VoronoiGridSettings(newSettings.GridSettings);
+            newGridSettings.Randomness += 1e-6f;
+
+            newSettings.GridSettings = newGridSettings;
+        }
 
         var settingsChanged = GUI.changed;
         if (settingsChanged)
             generator.Settings = newSettings;
 
-        if (Button("Save"))
+        if (Button("Save this one"))
         {
             var path = FileSaver.SaveMesh(generator.LatestMesh, "rock");
             OnFileExported(path);

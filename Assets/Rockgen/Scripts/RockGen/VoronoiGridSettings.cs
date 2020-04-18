@@ -7,6 +7,12 @@ public struct VoronoiGridSettings
     public int   Size       { get; set; }
     public float Randomness { get; set; }
 
+    public VoronoiGridSettings(VoronoiGridSettings other) : this()
+    {
+        Size       = other.Size;
+        Randomness = other.Randomness;
+    }
+
     public bool Equals(VoronoiGridSettings other)
     {
         return Size == other.Size && Randomness.Equals(other.Randomness);
