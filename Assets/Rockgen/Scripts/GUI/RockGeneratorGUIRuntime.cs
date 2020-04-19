@@ -4,6 +4,20 @@ namespace RockGen.Unity
 {
 public class RockGeneratorGUIRuntime : MonoBehaviour
 {
+    private readonly RockGenerationSettings defaultSettings = new RockGenerationSettings {
+        GridSettings = new VoronoiGridSettings {
+            Size       = 6,
+            Randomness = .75f
+        },
+        StockDensity        = 8,
+        TargetTriangleCount = 2000,
+        Distortion          = .5f,
+        Transform = Convert.ToRMatrix(UnityEngine.Matrix4x4.TRS(new Vector3(2.5f, 2.5f, 2.5f),
+                                                                Quaternion.identity,
+                                                                Vector3.one * 1.35f))
+    };
+
+
     RockBehavior rock;
     Mesh         mesh;
     GUIStyle     bgStyle;
@@ -11,6 +25,10 @@ public class RockGeneratorGUIRuntime : MonoBehaviour
     void Start()
     {
         rock = FindObjectOfType<RockBehavior>();
+
+        rock.generator.Settings = defaultSettings;
+        rock.UpdateMesh();
+
 
         var bgTex = new Texture2D(1, 1);
         bgTex.SetPixel(0, 0, new Color(.15f, .15f, .15f, .95f));

@@ -1,49 +1,25 @@
-using System.Linq;
 using MeshDecimator.Math;
-using RockGen;
 using UnityEngine;
-using Matrix4x4 = UnityEngine.Matrix4x4;
-using Mesh = UnityEngine.Mesh;
 using Vector3 = UnityEngine.Vector3;
 
 namespace RockGen.Unity
 {
 public class RockBehavior : MonoBehaviour
 {
-    [Header("Grid")]
-    public int size = 6;
-
-    public float randomness = .75f;
-
-    [Header("Rock")]
-    public float stockDensity = 8;
-
-    public int   targetTriangleCount = 1000;
-    public float distortion          = 1;
-
     [Header("Debug")]
-    public bool update;
+    public bool debug;
 
-    public bool  debug;
     public Color debugColor = Color.white;
 
-    RockGenerationSettings settings;
     internal RockGenerator generator;
     MeshFilter             meshFilter;
 
     void OnEnable()
     {
         meshFilter = GetComponent<MeshFilter>();
-
-        generator = new RockGenerator();
-
-        settings           = new RockGenerationSettings();
-        settings.Transform = Convert.ToRMatrix(transform.localToWorldMatrix);
+        generator  = new RockGenerator();
 
         generator.foundNearest += OnSettingsOnfoundNearest;
-
-        ApplySettings();
-        UpdateMesh();
     }
 
     void OnSettingsOnfoundNearest(Vector3d vertex, Vector3d normal, Vector3d nearest)
@@ -58,25 +34,6 @@ public class RockBehavior : MonoBehaviour
         }
     }
 
-    void ApplySettings()
-    {
-        if (generator == null) return;
-
-        var newGridSettings = new VoronoiGridSettings {
-            Size       = size,
-            Randomness = randomness
-        };
-
-        var newSettings = new RockGenerationSettings(settings) {
-            GridSettings        = newGridSettings,
-            StockDensity        = stockDensity,
-            TargetTriangleCount = targetTriangleCount,
-            Distortion          = distortion
-        };
-
-        generator.Settings = newSettings;
-    }
-
     internal void UpdateMesh()
     {
         FrameTime.Instance.StartWork("Gen");
@@ -84,31 +41,10 @@ public class RockBehavior : MonoBehaviour
         FrameTime.Instance.EndWork("Gen");
     }
 
-    void OnValidate()
-    {
-        ApplySettings();
-
-        if (update) return;
-        if (!Application.isPlaying) return;
-        if (!meshFilter) return;
-
-        UpdateMesh();
-    }
-
-    void Update()
-    {
-        if (update)
-        {
-            settings.Transform = Convert.ToRMatrix(transform.localToWorldMatrix);
-            // ApplySettings();
-            //
-            // UpdateMesh();
-        }
-    }
-
     void OnDrawGizmos()
     {
         if (!debug) return;
+        if (generator == null) return;
 
         foreach (var point in generator.Grid.points)
         {
