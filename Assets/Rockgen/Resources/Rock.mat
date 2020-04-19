@@ -94,7 +94,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.0481
-    - _Roughness: 0.75
+    - _Roughness: 0.95
     - _Sharpness: 64
     - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
