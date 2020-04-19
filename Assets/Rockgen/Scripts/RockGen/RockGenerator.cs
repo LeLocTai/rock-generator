@@ -61,7 +61,7 @@ public class RockGenerator
     {
         var vertices = new Vector3d[stockMesh.VertexCount];
 
-        var distort = Settings.Distortion;// / Settings.Scale.GetMagnitude();
+        var distort = Settings.Distortion; // / Settings.Scale.GetMagnitude();
 
         for (var i = 0; i < vertices.Length; i++)
         {
@@ -72,7 +72,10 @@ public class RockGenerator
 
             var worldResult = worldPos + worldNormal * ((nearestDS - .5) * distort);
 
-            vertices[i] = Transform(Settings.InverseTransform, worldResult);
+            // Keep the scale and rotation
+            vertices[i] = worldResult - new Vector3d(Settings.Transform.M14,
+                                                     Settings.Transform.M24,
+                                                     Settings.Transform.M34);
 
             OnFoundNearest(worldResult, worldNormal, nearest);
         }
