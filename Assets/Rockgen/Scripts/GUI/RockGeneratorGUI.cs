@@ -46,6 +46,18 @@ public static class RockGeneratorGUI
                                                newSettings.Distortion, -2, 2);
 
 
+        using (var gcs = new GUIChangedScope())
+        {
+            var Uniformity = Mathf.Clamp01(1 - newSettings.GridSettings.Randomness);
+            Uniformity = SettingSlider(nameof(Uniformity), Uniformity, 0, 1);
+
+            if (GUI.changed)
+            {
+                newSettings.GridSettings = new VoronoiGridSettings(newSettings.GridSettings) {
+                    Randomness = 1 - Uniformity
+                };
+            }
+        }
 
         using (var vs = new VerticalScope("Box"))
         using (var gcs = new GUIChangedScope())
