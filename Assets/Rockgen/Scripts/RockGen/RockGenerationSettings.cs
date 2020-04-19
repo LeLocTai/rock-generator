@@ -32,6 +32,7 @@ public struct RockGenerationSettings
     public float StockDensity        { get; set; }
     public int   TargetTriangleCount { get; set; }
     public float Distortion          { get; set; }
+    public float PatternSize         { get; set; }
 
     Matrix4x4 transform;
 
@@ -43,6 +44,7 @@ public struct RockGenerationSettings
         StockDensity        = other.StockDensity;
         TargetTriangleCount = other.TargetTriangleCount;
         Distortion          = other.Distortion;
+        PatternSize         = other.PatternSize;
     }
 }
 }

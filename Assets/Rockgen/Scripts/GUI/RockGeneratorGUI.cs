@@ -42,21 +42,26 @@ public static class RockGeneratorGUI
                           "N0"
             )
         );
-        newSettings.Distortion = SettingSlider(nameof(newSettings.Distortion),
-                                               newSettings.Distortion, -1, 1);
 
-
-        using (var gcs = new GUIChangedScope())
+        using (var vs = new VerticalScope("Box"))
         {
-            var Uniformity = Mathf.Clamp01(1 - newSettings.GridSettings.Randomness);
-            Uniformity = SettingSlider(nameof(Uniformity), Uniformity, 0, 1);
-
-            if (GUI.changed)
+            using (var gcs = new GUIChangedScope())
             {
-                newSettings.GridSettings = new VoronoiGridSettings(newSettings.GridSettings) {
-                    Randomness = 1 - Uniformity
-                };
+                var Uniformity = Mathf.Clamp01(1 - newSettings.GridSettings.Randomness);
+                Uniformity = SettingSlider(nameof(Uniformity), Uniformity, 0, 1);
+
+                if (GUI.changed)
+                {
+                    newSettings.GridSettings = new VoronoiGridSettings(newSettings.GridSettings) {
+                        Randomness = 1 - Uniformity
+                    };
+                }
             }
+
+            newSettings.Distortion = SettingSlider(nameof(newSettings.Distortion),
+                                                   newSettings.Distortion, -1, 1);
+            newSettings.PatternSize = SettingSlider(nameof(newSettings.PatternSize),
+                                                    newSettings.PatternSize, .5f, 1.5f);
         }
 
         using (var vs = new VerticalScope("Box"))

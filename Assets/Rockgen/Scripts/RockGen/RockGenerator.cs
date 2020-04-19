@@ -68,7 +68,7 @@ public class RockGenerator
             var worldPos    = Transform(Settings.Transform, stockMesh.Vertices[i]);
             var worldNormal = TransformDir(Settings.Transform, stockMesh.Normals[i]);
 
-            var (nearest, nearestDS) = Grid.Nearest(worldPos);
+            var (nearest, nearestDS) = Grid.Nearest(worldPos * Settings.PatternSize);
 
             var worldResult = worldPos + worldNormal * ((nearestDS - .5) * distort);
 

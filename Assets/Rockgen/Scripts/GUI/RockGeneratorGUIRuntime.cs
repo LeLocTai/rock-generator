@@ -12,6 +12,7 @@ public class RockGeneratorGUIRuntime : MonoBehaviour
         StockDensity        = 8,
         TargetTriangleCount = 2000,
         Distortion          = .5f,
+        PatternSize         = 1,
         Transform = Convert.ToRMatrix(UnityEngine.Matrix4x4.TRS(new Vector3(2.5f, 2.5f, 2.5f),
                                                                 Quaternion.identity,
                                                                 Vector3.one * 1.35f))
