@@ -8,10 +8,12 @@ using static UnityEngine.GUILayout;
 
 namespace RockGen.Unity
 {
-public class RockGeneratorGUI
+public static class RockGeneratorGUI
 {
     static readonly int MAX_LABEL_WIDTH;
     static readonly int CHARACTER_WIDTH;
+
+    static readonly Vector3 DEFAULT_POS = new Vector3(2.5f, 2.5f, 2.5f);
 
     static RockGeneratorGUI()
     {
@@ -44,6 +46,25 @@ public class RockGeneratorGUI
                                                newSettings.Distortion, -2, 2);
 
 
+
+        using (var vs = new VerticalScope("Box"))
+        using (var gcs = new GUIChangedScope())
+        {
+            var scale = newSettings.Scale;
+            Label("Size:");
+            var newX = SettingSlider("X", (float) scale.X, 0.1f, 2);
+            var newY = SettingSlider("Y", (float) scale.Y, 0.1f, 2);
+            var newZ = SettingSlider("Z", (float) scale.Z, 0.1f, 2);
+
+            if (GUI.changed)
+            {
+                var m = UnityEngine.Matrix4x4.TRS(DEFAULT_POS,
+                                                  Quaternion.identity,
+                                                  new Vector3(newX, newY, newZ));
+                newSettings.Transform = Convert.ToRMatrix(m);
+            }
+        }
+
         if (Button("Make Rock"))
         {
             var newGridSettings = new VoronoiGridSettings(newSettings.GridSettings);
@@ -67,11 +88,16 @@ public class RockGeneratorGUI
 
     static float SettingSlider(string varName,
                                float  value, float min, float max,
-                               string format = "N")
+                               string format    = "N",
+                               bool   autoLabel = true)
     {
         BeginHorizontal();
-        Label(Regex.Replace(varName, @"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", " $1"),
-              MaxWidth(MAX_LABEL_WIDTH));
+        if (autoLabel)
+        {
+            var label = Regex.Replace(varName, @"([A-Z]+?)", " $1");
+            Label(label, MaxWidth(MAX_LABEL_WIDTH));
+        }
+
         float newVal = HorizontalSlider(value, min, max, ExpandWidth(true));
         Label(value.ToString(format), Width(5 * CHARACTER_WIDTH));
         EndHorizontal();
