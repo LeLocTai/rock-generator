@@ -43,7 +43,7 @@ public static class RockGeneratorGUI
             )
         );
         newSettings.Distortion = SettingSlider(nameof(newSettings.Distortion),
-                                               newSettings.Distortion, -2, 2);
+                                               newSettings.Distortion, -1, 1);
 
 
         using (var gcs = new GUIChangedScope())
