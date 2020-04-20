@@ -13,7 +13,7 @@ public static class RockGeneratorGUI
     static readonly int MAX_LABEL_WIDTH;
     static readonly int CHARACTER_WIDTH;
 
-    static readonly Vector3 DEFAULT_POS = new Vector3(2.5f, 2.5f, 2.5f);
+    static readonly Vector3  DEFAULT_POS = new Vector3(2.5f, 2.5f, 2.5f);
 
     static RockGeneratorGUI()
     {
@@ -32,18 +32,23 @@ public static class RockGeneratorGUI
 
     public static bool OnGUI(RockGenerator generator)
     {
+        var groupStyle = GUI.skin.box;
         var newSettings = new RockGenerationSettings(generator.Settings);
 
-        newSettings.StockDensity = SettingSlider(nameof(newSettings.StockDensity),
-                                                 newSettings.StockDensity, 2, 16, "N1");
-        newSettings.TargetTriangleCount = Mathf.RoundToInt(
-            SettingSlider(nameof(newSettings.TargetTriangleCount),
-                          newSettings.TargetTriangleCount, 100, 2000,
-                          "N0"
-            )
-        );
+        using (var vs = new VerticalScope(groupStyle))
+        {
+            newSettings.StockDensity = SettingSlider(nameof(newSettings.StockDensity),
+                                                     newSettings.StockDensity, 2, 16, "N1");
+            newSettings.TargetTriangleCount = Mathf.RoundToInt(
+                SettingSlider(nameof(newSettings.TargetTriangleCount),
+                              newSettings.TargetTriangleCount, 50, 2000,
+                              "N0",
+                              logScale: true
+                )
+            );
+        }
 
-        using (var vs = new VerticalScope("Box"))
+        using (var vs = new VerticalScope(groupStyle))
         {
             using (var gcs = new GUIChangedScope())
             {
@@ -64,7 +69,7 @@ public static class RockGeneratorGUI
                                                     newSettings.PatternSize, .5f, 1.5f);
         }
 
-        using (var vs = new VerticalScope("Box"))
+        using (var vs = new VerticalScope(groupStyle))
         using (var gcs = new GUIChangedScope())
         {
             var scale = newSettings.Scale;
@@ -106,7 +111,8 @@ public static class RockGeneratorGUI
     static float SettingSlider(string varName,
                                float  value, float min, float max,
                                string format    = "N",
-                               bool   autoLabel = true)
+                               bool   autoLabel = true,
+                               bool   logScale  = false)
     {
         BeginHorizontal();
         if (autoLabel)
@@ -115,8 +121,21 @@ public static class RockGeneratorGUI
             Label(label, MaxWidth(MAX_LABEL_WIDTH));
         }
 
+        if (logScale)
+        {
+            value = Mathf.Log(value);
+            min   = Mathf.Log(min);
+            max   = Mathf.Log(max);
+        }
+
         float newVal = HorizontalSlider(value, min, max, ExpandWidth(true));
-        Label(value.ToString(format), Width(5 * CHARACTER_WIDTH));
+
+        if (logScale)
+        {
+            newVal = Mathf.Exp(newVal);
+        }
+
+        Label(newVal.ToString(format), Width(5 * CHARACTER_WIDTH));
         EndHorizontal();
         return newVal;
     }
