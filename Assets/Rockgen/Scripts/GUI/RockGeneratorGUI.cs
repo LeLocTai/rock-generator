@@ -14,7 +14,7 @@ public static class RockGeneratorGUI
     static readonly int MAX_LABEL_WIDTH;
     static readonly int CHARACTER_WIDTH;
 
-    static readonly Vector3  DEFAULT_POS = new Vector3(2.5f, 2.5f, 2.5f);
+    static readonly Vector3 DEFAULT_POS = new Vector3(2.5f, 2.5f, 2.5f);
 
     static RockGeneratorGUI()
     {
@@ -35,7 +35,7 @@ public static class RockGeneratorGUI
 
     public static bool OnGUI(RockGenerator generator)
     {
-        var groupStyle = GUI.skin.box;
+        var groupStyle  = GUI.skin.box;
         var newSettings = new RockGenerationSettings(generator.Settings);
 
         using (var vs = new VerticalScope(groupStyle))
@@ -76,10 +76,10 @@ public static class RockGeneratorGUI
         using (var gcs = new GUIChangedScope())
         {
             var scale = newSettings.Scale;
-            Label("Size:");
-            var newX = SettingSlider("X", (float) scale.X, 0.1f, 2);
-            var newY = SettingSlider("Y", (float) scale.Y, 0.1f, 2);
-            var newZ = SettingSlider("Z", (float) scale.Z, 0.1f, 2);
+            Label("Shape:");
+            var newX = SettingSlider("X", Mathf.Clamp((float) scale.X, .5f, 2), 0.5f, 2);
+            var newY = SettingSlider("Y", Mathf.Clamp((float) scale.Y, .5f, 2), 0.5f, 2);
+            var newZ = (float) scale.Z;
 
             if (GUI.changed)
             {
