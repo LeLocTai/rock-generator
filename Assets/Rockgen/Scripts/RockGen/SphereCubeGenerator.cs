@@ -49,9 +49,9 @@ public class SphereCubeGenerator
 
     private float radius;
 
-    private int numSubDivX = 8;
-    private int numSubDivY = 8;
-    private int numSubDivZ = 8;
+    private int numSubDivX = -1;
+    private int numSubDivY = -1;
+    private int numSubDivZ = -1;
 
     int verticesCount;
 
