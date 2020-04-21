@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using Rockgen.Unity;
 using UnityEngine;
 using static UnityEngine.GUILayout;
+using Random = UnityEngine.Random;
 
 namespace RockGen.Unity
 {
@@ -29,6 +30,8 @@ public static class RockGeneratorGUI
     }
 
     public static event Action<string> fileExported;
+
+    static Quaternion rotation = Quaternion.identity;
 
     public static bool OnGUI(RockGenerator generator)
     {
@@ -81,7 +84,7 @@ public static class RockGeneratorGUI
             if (GUI.changed)
             {
                 var m = UnityEngine.Matrix4x4.TRS(DEFAULT_POS,
-                                                  Quaternion.identity,
+                                                  rotation,
                                                   new Vector3(newX, newY, newZ));
                 newSettings.Transform = Convert.ToRMatrix(m);
             }
@@ -91,6 +94,12 @@ public static class RockGeneratorGUI
         {
             var newGridSettings = new VoronoiGridSettings(newSettings.GridSettings);
             newGridSettings.Randomness += 1e-6f;
+
+            newSettings.Transform = Convert.ToRMatrix(
+                UnityEngine.Matrix4x4.TRS(DEFAULT_POS + Random.insideUnitSphere,
+                                          rotation = Random.rotation,
+                                          Convert.ToVector3(newSettings.Scale))
+            );
 
             newSettings.GridSettings = newGridSettings;
         }
