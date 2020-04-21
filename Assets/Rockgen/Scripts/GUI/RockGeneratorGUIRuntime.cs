@@ -9,7 +9,7 @@ public class RockGeneratorGUIRuntime : MonoBehaviour
             Size       = 6,
             Randomness = .75f
         },
-        StockDensity        = 8,
+        StockDensity        = 16,
         TargetTriangleCount = 2000,
         Distortion          = .5f,
         PatternSize         = 1.35f,
