@@ -16,13 +16,13 @@ public struct RockGenerationSettings
             transform = value;
 
             Scale = new Vector(Math.Sqrt(transform.M11 * transform.M11 +
-                                         transform.M12 * transform.M12 +
-                                         transform.M13 * transform.M13),
-                               Math.Sqrt(transform.M21 * transform.M21 +
+                                         transform.M21 * transform.M21 +
+                                         transform.M31 * transform.M31),
+                               Math.Sqrt(transform.M12 * transform.M12 +
                                          transform.M22 * transform.M22 +
-                                         transform.M23 * transform.M23),
-                               Math.Sqrt(transform.M31 * transform.M31 +
-                                         transform.M32 * transform.M32 +
+                                         transform.M32 * transform.M32),
+                               Math.Sqrt(transform.M13 * transform.M13 +
+                                         transform.M23 * transform.M23 +
                                          transform.M33 * transform.M33));
         }
     }
