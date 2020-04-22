@@ -69,7 +69,7 @@ public static class RockGeneratorGUI
             newSettings.Distortion = SettingSlider(nameof(newSettings.Distortion),
                                                    newSettings.Distortion, -1, 1);
             newSettings.PatternSize = SettingSlider(nameof(newSettings.PatternSize),
-                                                    newSettings.PatternSize, .5f, 1.5f);
+                                                    newSettings.PatternSize, .5f, 2.5f);
         }
 
         using (var vs = new VerticalScope(groupStyle))

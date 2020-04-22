@@ -7,7 +7,7 @@ public class RockGeneratorWindow : EditorWindow
 {
     private readonly RockGenerationSettings defaultSettings = new RockGenerationSettings {
         GridSettings = new VoronoiGridSettings {
-            Size       = 6,
+            Size       = 10,
             Randomness = .75f
         },
         StockDensity        = 8,
