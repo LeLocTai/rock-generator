@@ -1,11 +1,9 @@
 using System;
-using System.Numerics;
 using System.Runtime.CompilerServices;
 using MeshDecimator;
 using MeshDecimator.Algorithms;
 using MeshDecimator.Math;
 using RockGen.Primitive;
-using Vector3 = MeshDecimator.Math.Vector3;
 
 namespace RockGen
 {

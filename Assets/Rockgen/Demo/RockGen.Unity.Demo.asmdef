@@ -1,0 +1,15 @@
+{
+    "name": "RockGen.Unity.Demo",
+    "references": [
+        "RockGen",
+        "RockGen.Unity"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
+}

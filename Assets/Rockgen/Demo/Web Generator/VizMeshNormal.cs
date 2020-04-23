@@ -1,6 +1,7 @@
-using System;
 using UnityEngine;
 
+namespace RockGen.Unity.Demo
+{
 public class VizMeshNormal : MonoBehaviour
 {
     MeshFilter mf;
@@ -25,4 +26,5 @@ public class VizMeshNormal : MonoBehaviour
                            transform.TransformDirection(n[i]) * .2f);
         }
     }
+}
 }

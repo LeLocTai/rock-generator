@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace RockGen.Unity
+namespace RockGen.Unity.Demo
 {
 public class DragOrbit : MonoBehaviour
 {

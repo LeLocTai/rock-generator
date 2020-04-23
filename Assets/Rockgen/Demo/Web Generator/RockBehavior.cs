@@ -2,7 +2,7 @@ using MeshDecimator.Math;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 
-namespace RockGen.Unity
+namespace RockGen.Unity.Demo
 {
 // Mostly for debugging.
 public class RockBehavior : MonoBehaviour
