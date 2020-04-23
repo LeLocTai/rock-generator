@@ -1,4 +1,5 @@
-﻿// Normal Mapping for a Triplanar Shader - Ben Golus 2017
+﻿// Adaptation of
+// Normal Mapping for a Triplanar Shader - Ben Golus 2017
 // Unity Surface Shader example shader
 
 // Implements correct triplanar normals in a Surface Shader with out computing or passing additional information from the

@@ -4,6 +4,7 @@ using Vector3 = UnityEngine.Vector3;
 
 namespace RockGen.Unity
 {
+// Mostly for debugging.
 public class RockBehavior : MonoBehaviour
 {
     [Header("Debug")]

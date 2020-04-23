@@ -3,6 +3,7 @@ using MeshDecimator.Math;
 
 namespace RockGen
 {
+// Subset of System.Numerics.Matrix4x4
 public struct Matrix4x4
 {
     /// <summary>The first element of the first row. </summary>

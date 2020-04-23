@@ -1,3 +1,5 @@
+// Generation algorithm adapted from https://catlikecoding.com/unity/tutorials/cube-sphere/
+
 using System.Collections.Generic;
 using MeshDecimator;
 using MeshDecimator.Math;

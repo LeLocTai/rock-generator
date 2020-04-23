@@ -28,6 +28,7 @@ public class RockGenerator
 
     public Mesh LatestMesh { get; private set; }
 
+    // For debugging
     public event Action<Vector3d, Vector3d, Vector3d> foundNearest;
 
     public VoronoiGrid Grid { get; private set; }
@@ -61,7 +62,7 @@ public class RockGenerator
     {
         var vertices = new Vector3d[stockMesh.VertexCount];
 
-        var distort = Settings.Distortion; // / Settings.Scale.GetMagnitude();
+        var distort = Settings.Distortion;
 
         for (var i = 0; i < vertices.Length; i++)
         {
