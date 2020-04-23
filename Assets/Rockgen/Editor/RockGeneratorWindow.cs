@@ -14,7 +14,7 @@ public class RockGeneratorWindow : EditorWindow
         TargetTriangleCount = 220,
         Distortion          = .5f,
         PatternSize         = 1.35f,
-        Transform = Convert.ToRMatrix(UnityEngine.Matrix4x4.TRS(new Vector3(2.5f, 2.5f, 2.5f),
+        Transform = Convert.FromUnityMatrix(UnityEngine.Matrix4x4.TRS(new Vector3(2.5f, 2.5f, 2.5f),
                                                                 Quaternion.identity,
                                                                 Vector3.one))
     };

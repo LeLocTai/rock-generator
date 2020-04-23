@@ -85,7 +85,7 @@ public static class RockGeneratorGUI
                 var m = UnityEngine.Matrix4x4.TRS(DEFAULT_POS,
                                                   rotation,
                                                   new Vector3(newX, newY, newZ));
-                newSettings.Transform = Convert.ToRMatrix(m);
+                newSettings.Transform = Convert.FromUnityMatrix(m);
             }
         }
 
@@ -94,7 +94,7 @@ public static class RockGeneratorGUI
             var newGridSettings = new VoronoiGridSettings(newSettings.GridSettings);
             newGridSettings.Randomness += 1e-6f;
 
-            newSettings.Transform = Convert.ToRMatrix(
+            newSettings.Transform = Convert.FromUnityMatrix(
                 UnityEngine.Matrix4x4.TRS(DEFAULT_POS + Random.insideUnitSphere,
                                           rotation = Random.rotation,
                                           Convert.ToVector3(newSettings.Scale))
