@@ -47,5 +47,5 @@ Look at the Rock Fountain sample for more details.
 
 Me. My free Unity assets are backed by my paid one. Check them out:
 
- - [Translucent Image - Fast blured background UI](https://leloctai.com/asset/translucentimage/)
+ - [Translucent Image - Fast blurred background UI](https://leloctai.com/asset/translucentimage/)
  - [True Shadow - UI Soft Shadow and Glow](https://assetstore.unity.com/packages/slug/176322?aid=1011l4nGC)
